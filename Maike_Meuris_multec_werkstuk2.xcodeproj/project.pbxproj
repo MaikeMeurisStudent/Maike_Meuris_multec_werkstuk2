@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		691E5FE520A3265E009540C1 /* MyAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 691E5FE420A3265E009540C1 /* MyAnnotation.swift */; };
+		691E5FE720A33DBA009540C1 /* StationDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 691E5FE620A33DBA009540C1 /* StationDetailViewController.swift */; };
 		69E5D525209B427600986BF5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69E5D524209B427600986BF5 /* AppDelegate.swift */; };
 		69E5D527209B427600986BF5 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69E5D526209B427600986BF5 /* ViewController.swift */; };
 		69E5D52A209B427600986BF5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 69E5D528209B427600986BF5 /* Main.storyboard */; };
@@ -18,6 +19,7 @@
 
 /* Begin PBXFileReference section */
 		691E5FE420A3265E009540C1 /* MyAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyAnnotation.swift; sourceTree = "<group>"; };
+		691E5FE620A33DBA009540C1 /* StationDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationDetailViewController.swift; sourceTree = "<group>"; };
 		69E5D521209B427600986BF5 /* Maike_Meuris_multec_werkstuk2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Maike_Meuris_multec_werkstuk2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		69E5D524209B427600986BF5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		69E5D526209B427600986BF5 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -60,6 +62,7 @@
 			children = (
 				69E5D524209B427600986BF5 /* AppDelegate.swift */,
 				69E5D526209B427600986BF5 /* ViewController.swift */,
+				691E5FE620A33DBA009540C1 /* StationDetailViewController.swift */,
 				69E5D528209B427600986BF5 /* Main.storyboard */,
 				69E5D52E209B427600986BF5 /* Assets.xcassets */,
 				69E5D530209B427600986BF5 /* LaunchScreen.storyboard */,
@@ -146,6 +149,7 @@
 				69E5D52D209B427600986BF5 /* Maike_Meuris_multec_werkstuk2.xcdatamodeld in Sources */,
 				691E5FE520A3265E009540C1 /* MyAnnotation.swift in Sources */,
 				69E5D525209B427600986BF5 /* AppDelegate.swift in Sources */,
+				691E5FE720A33DBA009540C1 /* StationDetailViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
