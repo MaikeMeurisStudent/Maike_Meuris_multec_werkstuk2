@@ -12,6 +12,8 @@ import MapKit
 
 class ViewController: UIViewController, MKMapViewDelegate {
     
+    var stations:[Station]?
+    
     var managedContext:NSManagedObjectContext?
     
     @IBOutlet weak var mapView: MKMapView!
@@ -24,15 +26,24 @@ class ViewController: UIViewController, MKMapViewDelegate {
         //De gebruiker kan de gegevens opnieuw laten ophalen via Core Data en bijgevolg de data in Core Data laten vernieuwen.
         
         // Eerst de bestaande core data leeg maken
-        let stations = haalStationsUitCoreData()
+        stations = haalStationsUitCoreData()
+        
         /*print("Er zijn nu zoveel stations in code data")
-        print(stations.count)*/
-        for station in stations{
+        print(stations!.count)
+        print("Er zijn nu zoveel annotations op de map")
+        print(mapView.annotations.count)*/
+        
+        for station in stations!{
             managedContext?.delete(station)
         }
-        /*print("Nu moeten ze verwijderd zijn")
+        
+        self.mapView.removeAnnotations(self.mapView.annotations)
+        
+        /*print("Nu moeten de stations uit code data verwijderd zijn")
         let stations2 = haalStationsUitCoreData()
-        print(stations2.count)*/
+        print(stations2.count)
+        print("Nu moeten de annotations verwijderd zijn")
+        print(mapView.annotations.count)*/
         
         // Dan de data opnieuw uitladen uit de JSON
         laadDataIn()
@@ -56,17 +67,17 @@ class ViewController: UIViewController, MKMapViewDelegate {
         }
         self.managedContext = appDelegate.persistentContainer.viewContext
         
-        let stations = haalStationsUitCoreData()
+        stations = haalStationsUitCoreData()
         
         print("Aantal stations:")
-        print(stations.count)
+        print(stations!.count)
         
-        if(stations.count == 0){ // Als er nog geen stations zijn, gaan we ze ophalen uit JSON
+        if(stations!.count == 0){ // Als er nog geen stations zijn, gaan we ze ophalen uit JSON
             laadDataIn()
         } else{ // Anders worden er gewoon de stations getoond die in de core data zitten
-            haalStationsOp()
+            //haalStationsOp()
+            voegStationsToe()
         }
-        
     }
     
     func haalStationsUitCoreData() -> [Station]{
@@ -82,22 +93,8 @@ class ViewController: UIViewController, MKMapViewDelegate {
         }
     }
     
-    func haalStationsOp(){
-        // Stations uit core data ophalen
-        
-        let coreDataStations = NSFetchRequest<NSFetchRequestResult>(entityName: "Station")
-        let opgehaaldeStations:[Station]
-        do {
-            opgehaaldeStations = try managedContext!.fetch(coreDataStations) as! [Station]
-            voegStationsToe(stations: opgehaaldeStations)
-        } catch {
-            fatalError("Failed to fetch stations: \(error)")
-        }
-    }
-    
-    func voegStationsToe(stations: [Station]){
-        print("voeg stations toe")
-        for station in stations{
+    func voegStationsToe(){
+        for station in stations!{
             
             let titel = station.name
             let coordinaat = CLLocationCoordinate2D(latitude: station.latitude, longitude: station.longitude)
@@ -107,7 +104,6 @@ class ViewController: UIViewController, MKMapViewDelegate {
             self.mapView.addAnnotation(myAnnotation)
         }
     }
-    
     
     func laadDataIn(){
         
@@ -178,7 +174,9 @@ class ViewController: UIViewController, MKMapViewDelegate {
                 DispatchQueue.main.async {
                     self.lblBijgewerkt.text = self.laatstGeupdate
                     print("Var tekst tijdstip wordt in label gezet")
-                    self.haalStationsOp()
+                    self.stations = self.haalStationsUitCoreData()
+                    self.voegStationsToe()
+                    //self.haalStationsOp()
                 }
                 
             }
@@ -201,14 +199,15 @@ class ViewController: UIViewController, MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         print("station aangeklikt")
-        print(view.annotation?.title!)
-        performSegue(withIdentifier: "naarStationDetail", sender: self)
+        let stationNaam = view.annotation!.title
+        performSegue(withIdentifier: "naarStationDetail", sender: stationNaam)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "naarStationDetail" {
             if let nextVC = segue.destination as? StationDetailViewController {
-                //nextVC.doorgegevenFoto = persoon!.foto
+                nextVC.doorgegevenStation = sender as! String
+                nextVC.stations = self.stations
             }
         }
     }
