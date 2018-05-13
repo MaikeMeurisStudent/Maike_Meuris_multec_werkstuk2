@@ -72,6 +72,7 @@ class ViewController: UIViewController, MKMapViewDelegate {
         }
     }
     
+    // Lijst van stations ophalen uit Core Data
     func haalStationsUitCoreData() -> [Station]{
         let coreDataStations = NSFetchRequest<NSFetchRequestResult>(entityName: "Station")
         let opgehaaldeStations:[Station]
@@ -85,6 +86,7 @@ class ViewController: UIViewController, MKMapViewDelegate {
         }
     }
     
+    // Stations toevoegen als annotations op de map
     func voegStationsToe(){
         for station in stations!{
             
@@ -97,6 +99,7 @@ class ViewController: UIViewController, MKMapViewDelegate {
         }
     }
     
+    // Stations inladen uit JSON en in Core Data stoppen, vervolgens de datum van updaten bijhouden en de stations op de map vernieuwen
     func laadDataIn(){
         
         DispatchQueue.main.async {
@@ -193,6 +196,7 @@ class ViewController: UIViewController, MKMapViewDelegate {
         // Dispose of any resources that can be recreated.
     }
     
+    // Huidige locatie van de appgebruiker als middelpunt van de map nemen, zodat hij alle stations rondom zich kan zien
     func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
         let center = CLLocationCoordinate2D(latitude: userLocation.coordinate.latitude, longitude: userLocation.coordinate.longitude)
         let span = MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
