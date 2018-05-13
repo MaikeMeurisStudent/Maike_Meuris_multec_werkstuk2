@@ -1,0 +1,42 @@
+
+/* Class = "UILabel"; text = "VRIJE"; ObjectID = "2rt-Tg-y6t"; */
+"2rt-Tg-y6t.text" = "AVAILABLE";
+
+/* Class = "UILabel"; text = "OPEN"; ObjectID = "8ss-sQ-Pyc"; */
+"8ss-sQ-Pyc.text" = "OPEN";
+
+/* Class = "UILabel"; text = "NAAM"; ObjectID = "8xo-4o-TKJ"; */
+"8xo-4o-TKJ.text" = "NAME";
+
+/* Class = "UILabel"; text = "FIETSEN"; ObjectID = "Hj2-gB-ycl"; */
+"Hj2-gB-ycl.text" = "BIKES";
+
+/* Class = "UILabel"; text = "Adres"; ObjectID = "N5d-pz-ZWd"; */
+"N5d-pz-ZWd.text" = "Address";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "Nbm-re-uXs"; */
+"Nbm-re-uXs.text" = "Label";
+
+/* Class = "UILabel"; text = "ADRES"; ObjectID = "P8z-MJ-Wzf"; */
+"P8z-MJ-Wzf.text" = "ADDRESS";
+
+/* Class = "UIButton"; normalTitle = "HERLADEN"; ObjectID = "aMg-ZA-f6j"; */
+"aMg-ZA-f6j.normalTitle" = "RELOAD";
+
+/* Class = "UILabel"; text = "Test"; ObjectID = "gtd-PZ-8ST"; */
+"gtd-PZ-8ST.text" = "Test";
+
+/* Class = "UILabel"; text = "PLAATSEN"; ObjectID = "nne-PJ-Sng"; */
+"nne-PJ-Sng.text" = "PLACES";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "ofM-XX-NJl"; */
+"ofM-XX-NJl.text" = "Label";
+
+/* Class = "UINavigationItem"; title = "Villo Stations"; ObjectID = "qPg-s5-vQ8"; */
+"qPg-s5-vQ8.title" = "Villo Stations";
+
+/* Class = "UILabel"; text = "BESCHIKBARE"; ObjectID = "qq0-cn-H2i"; */
+"qq0-cn-H2i.text" = "AVAILABLE";
+
+/* Class = "UILabel"; text = "LAATST BIJGEWERKT OP"; ObjectID = "z4i-s3-KLb"; */
+"z4i-s3-KLb.text" = "LAST UPDATED ON";

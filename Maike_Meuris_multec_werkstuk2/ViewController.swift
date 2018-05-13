@@ -14,6 +14,7 @@ class ViewController: UIViewController, MKMapViewDelegate {
     
     var stations:[Station]?
     
+    // Globaal bijhouden, want wordt gebruikt in verschillende functies in dit bestand
     var managedContext:NSManagedObjectContext?
     
     @IBOutlet weak var mapView: MKMapView!
@@ -22,36 +23,26 @@ class ViewController: UIViewController, MKMapViewDelegate {
     @IBOutlet weak var lblBijgewerkt: UILabel!
     @IBOutlet weak var btnHerladen: UIButton!
     
+    var nu = Date()
+    let formatter = DateFormatter()
+    var laatstGeupdate:String = ""
+    
+    // Herladen van de station informatie
     @IBAction func clickBtnHerladen(_ sender: Any) {
-        //De gebruiker kan de gegevens opnieuw laten ophalen via Core Data en bijgevolg de data in Core Data laten vernieuwen.
+        //OPGAVE: De gebruiker kan de gegevens opnieuw laten ophalen via Core Data en bijgevolg de data in Core Data laten vernieuwen.
         
         // Eerst de bestaande core data leeg maken
         stations = haalStationsUitCoreData()
-        
-        /*print("Er zijn nu zoveel stations in code data")
-        print(stations!.count)
-        print("Er zijn nu zoveel annotations op de map")
-        print(mapView.annotations.count)*/
-        
         for station in stations!{
             managedContext?.delete(station)
         }
         
+        // Annotations op de map verwijderen
         self.mapView.removeAnnotations(self.mapView.annotations)
         
-        /*print("Nu moeten de stations uit code data verwijderd zijn")
-        let stations2 = haalStationsUitCoreData()
-        print(stations2.count)
-        print("Nu moeten de annotations verwijderd zijn")
-        print(mapView.annotations.count)*/
-        
-        // Dan de data opnieuw uitladen uit de JSON
+        // Dan de data opnieuw uitladen uit de JSON, opslaan in Core Data en tonen op de map dmv annotations
         laadDataIn()
     }
-    
-    var nu = Date()
-    let formatter = DateFormatter()
-    var laatstGeupdate:String = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,7 +50,7 @@ class ViewController: UIViewController, MKMapViewDelegate {
         locationManager.requestAlwaysAuthorization()
         locationManager.startUpdatingLocation()
         
-        //De gegevens van de JSON webservice die we in onze app zullen gebruiken worden bij de eerste opstart van de app gepersisteerd via Core Data.
+        //OPGAVE: De gegevens van de JSON webservice die we in onze app zullen gebruiken worden bij de eerste opstart van de app gepersisteerd via Core Data.
         
         // Kijken of core data leeg is of niet (of de station al zijn opgehaald uit JSON)
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
@@ -69,13 +60,14 @@ class ViewController: UIViewController, MKMapViewDelegate {
         
         stations = haalStationsUitCoreData()
         
-        print("Aantal stations:")
-        print(stations!.count)
-        
         if(stations!.count == 0){ // Als er nog geen stations zijn, gaan we ze ophalen uit JSON
             laadDataIn()
-        } else{ // Anders worden er gewoon de stations getoond die in de core data zitten
-            //haalStationsOp()
+        } else{ // Anders worden er gewoon de stations getoond die al in de Core Data zitten (datum en tijd zijn dan ook zoiezo al bekend, want die worden bij elke keer inladen automatisch opgeslagen)
+            let datum = String(describing: UserDefaults.standard.object(forKey: "updatedDate")!)
+            let uur = String(describing: UserDefaults.standard.object(forKey: "updatedHour")!)
+            
+            self.lblBijgewerkt.text = datum + " " + NSLocalizedString("tijdstip", comment: "") + " " + uur
+            
             voegStationsToe()
         }
     }
@@ -130,12 +122,12 @@ class ViewController: UIViewController, MKMapViewDelegate {
                 }
                 
                 guard let villoData = try? JSONSerialization.jsonObject(with: responseData, options: []) as? [AnyObject] else {
-                    
                     print("failed JSONSerialization")
                     return
                 }
                 
                 
+                // Elk item in de array opslaan als Station Entity in Core Data
                 for i in 0...(villoData!.count-1){
                     
                     let station = NSEntityDescription.insertNewObject(forEntityName: "Station", into: self.managedContext!) as! Station
@@ -164,16 +156,27 @@ class ViewController: UIViewController, MKMapViewDelegate {
                     fatalError("Failure to save context: \(error)")
                 }
                 
-                //De gebruiker kan zien wanneer de data in Core Data voor het laatst werd bijgewerkt.
+                //OPGAVE: De gebruiker kan zien wanneer de data in Core Data voor het laatst werd bijgewerkt.
+                // Volgens de opgave moet bij een nieuwe opstart van de app de Core Data niet vernieuwd worden adhv de JSON, dus geldt de laatst bijgewerkte datum en uurtijdstip van de vorige keer dat de app aanstond. Deze datum en uur houden we bij in de UserDefaults, zodat deze toegankelijk is om te tonen bij een nieuwe opstart van de app. Datum en uur worden apart bijgehouden, zodat het keyword "om/on" nog steeds kan veranderen afhankelijk van de ingestelde taal, moest die bij een volgende opstart anders zijn.
+                
+                /*self.nu = Date()
+                self.formatter.dateFormat = "dd-MM-yyyy' " + NSLocalizedString("tijdstip", comment: "") + " 'HH:mm:ss"
+                self.laatstGeupdate = self.formatter.string(from: self.nu)*/
+                
                 self.nu = Date()
-                self.formatter.dateFormat = "dd-MM-yyyy' om 'HH:mm:ss"
-                self.laatstGeupdate = self.formatter.string(from: self.nu)
-                print("Nieuwe tijdstip wordt in var gestopt")
+                self.formatter.dateFormat = "dd-MM-yyyy"
+                let datum = self.formatter.string(from: self.nu)
+                self.formatter.dateFormat = "HH:mm:ss"
+                let uur = self.formatter.string(from: self.nu)
+                
+                self.laatstGeupdate = datum + " " + NSLocalizedString("tijdstip", comment: "") + " " + uur
+                
+                UserDefaults.standard.set(datum, forKey: "updatedDate")
+                UserDefaults.standard.set(uur, forKey: "updatedHour")
                 
                 // UI aanpassen in main thread
                 DispatchQueue.main.async {
                     self.lblBijgewerkt.text = self.laatstGeupdate
-                    print("Var tekst tijdstip wordt in label gezet")
                     self.stations = self.haalStationsUitCoreData()
                     self.voegStationsToe()
                     //self.haalStationsOp()

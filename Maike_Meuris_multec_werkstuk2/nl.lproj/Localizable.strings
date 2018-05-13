@@ -1,0 +1,12 @@
+/* 
+  Localizable.strings
+  Maike_Meuris_multec_werkstuk2
+
+  Created by Maike Meuris on 13/05/2018.
+  Copyright © 2018 Maike Meuris. All rights reserved.
+*/
+
+"tijdstip"="om";
+"open"="OPEN";
+"gesloten"="GESLOTEN";
+"nietGekend"="Onbekend";

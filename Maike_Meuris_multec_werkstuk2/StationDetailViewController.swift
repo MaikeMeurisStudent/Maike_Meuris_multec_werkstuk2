@@ -19,6 +19,8 @@ class StationDetailViewController: UIViewController {
     @IBOutlet weak var lblVrijePlaatsen: UILabel!
     @IBOutlet weak var lblBeschikbareFietsen: UILabel!
     
+    @IBOutlet weak var lblStationAdres: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -45,15 +47,21 @@ class StationDetailViewController: UIViewController {
         
         lblStationNaam.text = station!.name
         
-        lblOpenOfGesloten.text = station!.status
+        // Afhankelijk van de status en de taal het juiste woord en de juiste kleur zetten
+        // "open" is in beide talen hetzelfde, maar is toch voorzien in het geval er nog meer beschikbare talen worden toegevoegd
         if station!.status == "OPEN" {
+            lblOpenOfGesloten.text = NSLocalizedString("open", comment: "")
             lblOpenOfGesloten.textColor = UIColor(red: 0, green: 0.5765, blue: 0.1255, alpha: 1.0)
         } else{
+            lblOpenOfGesloten.text = NSLocalizedString("gesloten", comment: "")
             lblOpenOfGesloten.textColor = UIColor.red
         }
         
+        // Geen NumberFormatter nodig, want er komen geen decimalen of getallen met meer dan 2 digits in voor
         lblVrijePlaatsen.text = String(station!.available_bike_stands)
         lblBeschikbareFietsen.text = String(station!.available_bikes)
+        
+        lblStationAdres.text = station!.address
         
     }
 
